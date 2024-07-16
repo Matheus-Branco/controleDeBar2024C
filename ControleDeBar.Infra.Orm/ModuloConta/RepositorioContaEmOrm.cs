@@ -1,4 +1,5 @@
 ﻿using ControleDeBar.Dominio.ModuloConta;
+using ControleDeBar.Dominio.ModuloGarcom;
 using ControleDeBar.Infra.Orm.Compartilhado;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,32 @@ namespace ControleDeBar.Infra.Orm.ModuloConta
             dbContext.Contas.Add(conta);
 
             dbContext.SaveChanges();
+        }
+
+        public bool Editar(Conta registroOriginal, Conta registroAtualizado)
+        {
+            if (registroOriginal == null || registroAtualizado == null)
+                return false;
+
+            registroOriginal.AtualizarInformacoes(registroAtualizado);
+
+            dbContext.Contas.Update(registroOriginal);
+
+            dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Excluir(Conta registro)
+        {
+            if (registro == null)
+                return false;
+
+            dbContext.Contas.Remove(registro);
+
+            dbContext.SaveChanges();
+
+            return true;
         }
 
         public bool AtualizarPedidos(Conta contaAtualizada, List<Pedido> pedidosRemovidos)
